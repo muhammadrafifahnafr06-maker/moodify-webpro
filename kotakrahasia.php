@@ -2,7 +2,7 @@
 session_start();
 include 'config.php';
 
-if(!isset($_SESSION['user_id'])){
+if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
@@ -31,8 +31,8 @@ $query_data = mysqli_query($conn, "SELECT * FROM kotak_rahasia $filter ORDER BY 
 <div class="navbar">
     <div class="logo">Moodify</div>
     <div class="menu">
-        <a href="#">Suasana Hati</a>
-        <a href="#">My Diary</a>
+        <a href="suasana_hati.php">Suasana Hati</a>
+        <a href="mydiary.php">My Diary</a>
         <a href="kotakrahasia.php" class="active">Kotak Rahasia</a>
         <a href="#">Mood Tracker</a>
         <a href="logout.php" class="logout-btn">Logout</a>
