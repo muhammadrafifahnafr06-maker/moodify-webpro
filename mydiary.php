@@ -1,9 +1,9 @@
 <?php
 session_start();
-include 'config.php';
+include 'Config.php';
 
 if(!isset($_SESSION['username'])){
-    header("Location: login.php");
+    header("Location: Login.php");
     exit();
 }
 
@@ -41,6 +41,7 @@ else{
 ?>
 
 <!DOCTYPE html>
+
 <html>
 
 <head>
@@ -233,15 +234,15 @@ Moodify
 My Diary
 </a>
 
-<a href="kotak_rahasia.php">
+<a href="kotakrahasia.php">
 Kotak Rahasia
 </a>
 
-<a href="mood_tracker.php">
+<a href="moodtracker.php">
 Mood Tracker
 </a>
 
-<a href="logout.php">
+<a href="Logout.php">
 Logout
 </a>
 
