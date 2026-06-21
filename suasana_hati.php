@@ -1,26 +1,19 @@
 <?php
 session_start();
-include "Config.php";
+include 'config.php';
 
-if(!isset($_SESSION['username'])){
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-$id_user = $_SESSION['id_user'];
+$id_user = $_SESSION['user_id'];
 
-$data = mysqli_query(
-    $conn,
-    "SELECT * FROM suasana_hati
-    WHERE id_user='$id_user'
-    ORDER BY id_mood DESC"
-);
+$query_user = mysqli_query($conn, "SELECT * FROM users WHERE id_user = '$id_user'");
+$row = mysqli_fetch_assoc($query_user);
 
-$username = "User";
 
-if(isset($_SESSION['username'])){
-    $username = $_SESSION['username'];
-}
+$data = mysqli_query($conn, "SELECT * FROM suasana_hati WHERE id_user = '$id_user' ORDER BY tanggal DESC"); 
 ?>
 
 <!DOCTYPE html>
@@ -269,11 +262,7 @@ Moodify
 
 <div class="card">
 
-<h1>
-
-Halo, <?php echo $username; ?> 👋
-
-</h1>
+<h1>Halo, <?php echo htmlspecialchars($row['username']); ?> 👋</h1>
 
 <div class="subtitle">
 

@@ -1,9 +1,55 @@
 <?php
 session_start();
+include 'config.php';
 
-if (isset($_SESSION['username'])) {
-    header("Location: suasana_hati.php");
-    exit();
+// 1. PENCEGAHAN LOOP REDIRECT
+// Jika user/admin SUDAH LOGIN, langsung oper ke halaman masing-masing
+if (isset($_SESSION['user_id'])) {
+    if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
+        header("Location: admin_dashboard.php");
+        exit();
+    } else {
+        header("Location: suasana_hati.php");
+        exit();
+    }
+}
+
+// 2. PROSES EKSEKUSI TOMBOL LOGIN
+if (isset($_POST['login'])) {
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = $_POST['password']; 
+
+    // Query mencari user berdasarkan username
+    $query = mysqli_query($conn, "SELECT * FROM users WHERE username = '$username'");
+    
+    if (mysqli_num_rows($query) > 0) {
+        $row = mysqli_fetch_assoc($query);
+
+        // Cek kecocokan password
+        if ($password == $row['password']) {
+            
+            // Daftarkan data ke session secara lengkap
+            $_SESSION['user_id']  = $row['id_user'];
+            $_SESSION['username'] = $row['username'];
+            $_SESSION['role']     = $row['role']; 
+
+            // Alihkan halaman secara spesifik sesuai ROLE
+            if ($row['role'] == 'admin') {
+                header("Location: admin_dashboard.php");
+                exit();
+            } else {
+                header("Location: suasana_hati.php");
+                exit();
+            }
+
+        } else {
+            echo "<script>alert('Password salah!'); window.location='login.php';</script>";
+            exit();
+        }
+    } else {
+        echo "<script>alert('Username tidak ditemukan!'); window.location='login.php';</script>";
+        exit();
+    }
 }
 ?>
 
@@ -16,7 +62,8 @@ if (isset($_SESSION['username'])) {
     <style>
         body { 
             margin: 0; 
-            font-family: Arial; 
+            /* Menggunakan font system-ui agar serasi bulat minimalis dengan navbar */
+            font-family: system-ui, -apple-system, sans-serif; 
             background: #f5f5f5; 
             display: flex; 
             justify-content: center; 
@@ -38,11 +85,13 @@ if (isset($_SESSION['username'])) {
             color: #ffe600; 
             font-size: 40px; 
             margin: 0; 
+            font-weight: 800;
         }
 
         p {
             margin-bottom: 25px;
             color: #333;
+            font-weight: 500;
         }
 
         input { 
@@ -54,6 +103,7 @@ if (isset($_SESSION['username'])) {
             background: #f1f1f1; 
             box-sizing: border-box; 
             outline: none;
+            font-family: system-ui, sans-serif;
         }
 
         input:focus {
@@ -70,6 +120,8 @@ if (isset($_SESSION['username'])) {
             font-weight: bold; 
             cursor: pointer; 
             margin-top: 10px; 
+            font-family: system-ui, sans-serif;
+            font-size: 15px;
         }
 
         button:hover {
@@ -77,14 +129,13 @@ if (isset($_SESSION['username'])) {
         }
     </style>
 </head>
-
 <body>
 
     <div class="login-box">
         <h1>Moodify</h1>
         <p>Silahkan Login</p>
 
-        <form action="proses_login.php" method="POST">
+        <form action="" method="POST">
             <input 
                 type="text" 
                 name="username" 

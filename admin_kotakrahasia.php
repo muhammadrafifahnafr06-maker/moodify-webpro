@@ -38,8 +38,67 @@ $query_data = mysqli_query($conn, "SELECT * FROM kotak_rahasia ORDER BY id_post 
         table tr:nth-child(even) { background-color: #fafafa; }
         
         .badge { background-color: #ffd700; color: black; padding: 5px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .btn-delete { background-color: #e60000; color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; }
+        .btn-delete { background-color: #e60000; color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; display: inline-block; }
         .btn-delete:hover { background-color: #b30000; }
+
+        /* ==================== STYLE MODAL CUSTOM (TENGAH LAYAR) ==================== */
+        .custom-modal {
+            display: none; 
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 9999; 
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 360px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            animation: fadeIn 0.25s ease;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn-cancel {
+            background-color: #e0e0e0;
+            color: #333;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-cancel:hover { background-color: #d5d5d5; }
+
+        .btn-confirm {
+            background-color: #e60000;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+        }
+        .btn-confirm:hover { background-color: #b30000; }
+
+        @keyframes fadeIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -48,7 +107,7 @@ $query_data = mysqli_query($conn, "SELECT * FROM kotak_rahasia ORDER BY id_post 
         <a href="admin_dashboard.php" class="brand">Moodify Admin</a>
         <a href="admin_dashboard.php" class="menu-link">Dashboard</a>
         <a href="admin_kotakrahasia.php" class="menu-link active">Kelola Kotak Rahasia</a>
-        <a href="admin_mydiary.php" class="menu-link">Monitoring Diary</a>
+        <a href="admin_kelolaakun.php" class="menu-link">Kelola Pengguna</a>
         <a href="logout.php" class="btn-logout">Logout</a>
     </div>
 
@@ -75,14 +134,51 @@ $query_data = mysqli_query($conn, "SELECT * FROM kotak_rahasia ORDER BY id_post 
                     <td><span class="badge"><?php echo htmlspecialchars($row['kategori']); ?></span></td>
                     <td><?php echo htmlspecialchars($row['isi_cerita']); ?></td> 
                     <td style="text-align: center;">
-                        <a href="admin_kotakrahasia.php?action=delete&id=<?php echo $row['id_post']; ?>" 
-                           class="btn-delete" onclick="return confirm('Yakin ingin menghapus cerita ini?')">Hapus</a>
+                        <!-- MENGGUNAKAN JAVASCRIPT OPEN MODAL KITA -->
+                        <a href="javascript:void(0);" class="btn-delete" 
+                           onclick="openDeleteModal('admin_kotakrahasia.php?action=delete&id=<?php echo $row['id_post']; ?>')">Hapus</a>
                     </td>
                 </tr>
                 <?php } ?>
             </tbody>
         </table>
     </div>
+
+    <!-- MODAL CUSTOM POP-UP -->
+    <div id="deleteModal" class="custom-modal">
+        <div class="modal-content">
+            <h3 style="margin-top: 0; color: #333;">Konfirmasi Hapus</h3>
+            <p style="color: #666;">Apakah Anda yakin ingin menghapus cerita ini? Tindakan ini tidak dapat dibatalkan.</p>
+            <div class="modal-buttons">
+                <button type="button" class="btn-cancel" onclick="closeDeleteModal()">Batal</button>
+                <a id="confirmDeleteBtn" href="#" class="btn-confirm" style="text-decoration: none; display: inline-block; line-height: 20px;">Hapus</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT UNTUK ATUR MODAL -->
+    <script>
+    function openDeleteModal(deleteUrl) {
+        const modal = document.getElementById('deleteModal');
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+        
+        confirmBtn.href = deleteUrl; // Set link tujuan hapus ke tombol modal
+        modal.style.display = 'flex'; // Munculkan modal di tengah
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById('deleteModal');
+        modal.style.display = 'none'; // Sembunyikan modal
+    }
+
+    // Klik di luar kotak putih otomatis tutup modal
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+    </script>
 
 </body>
 </html>

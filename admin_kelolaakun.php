@@ -82,7 +82,67 @@ $query_data = mysqli_query($conn, "SELECT id_user, username, email, password, ro
         table td { padding: 12px; border-bottom: 1px solid #ddd; color: #444; }
         table tr:nth-child(even) { background-color: #fafafa; }
         .btn-edit { color: #4a90e2; text-decoration: none; font-weight: bold; margin-right: 12px; }
-        .btn-delete { color: #d9534f; text-decoration: none; font-weight: bold; }
+        .btn-delete { color: #d9534f; text-decoration: none; font-weight: bold; cursor: pointer; display: inline-block; }
+        .btn-delete:hover { color: #b30000; }
+
+        /* ==================== STYLE MODAL CUSTOM (TENGAH LAYAR) ==================== */
+        .custom-modal {
+            display: none; 
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 9999; 
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 360px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            animation: fadeIn 0.25s ease;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn-modal-cancel {
+            background-color: #e0e0e0;
+            color: #333;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-modal-cancel:hover { background-color: #d5d5d5; }
+
+        .btn-modal-confirm {
+            background-color: #d9534f;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+        }
+        .btn-modal-confirm:hover { background-color: #b30000; }
+
+        @keyframes fadeIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -163,13 +223,49 @@ $query_data = mysqli_query($conn, "SELECT id_user, username, email, password, ro
                     <td><?php echo $row['role']; ?></td>
                     <td>
                         <a href="admin_kelolaakun.php?action=edit&id=<?php echo $row['id_user']; ?>" class="btn-edit">Edit</a>
-                        <a href="admin_kelolaakun.php?action=delete&id=<?php echo $row['id_user']; ?>" class="btn-delete" onclick="return confirm('Hapus pengguna ini?')">Hapus</a>
+                        
+                        <a href="javascript:void(0);" class="btn-delete" 
+                           onclick="openDeleteModal('admin_kelolaakun.php?action=delete&id=<?php echo $row['id_user']; ?>')">Hapus</a>
                     </td>
                 </tr>
                 <?php } ?>
             </tbody>
         </table>
     </div>
+
+    <div id="deleteModal" class="custom-modal">
+        <div class="modal-content">
+            <h3 style="margin-top: 0; color: #333;">Konfirmasi Hapus</h3>
+            <p style="color: #666;">Apakah Anda yakin ingin menghapus pengguna ini? Tindakan ini tidak dapat dibatalkan.</p>
+            <div class="modal-buttons">
+                <button type="button" class="btn-modal-cancel" onclick="closeDeleteModal()">Batal</button>
+                <a id="confirmDeleteBtn" href="#" class="btn-modal-confirm" style="text-decoration: none; display: inline-block; line-height: 20px;">Hapus</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function openDeleteModal(deleteUrl) {
+        const modal = document.getElementById('deleteModal');
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+        
+        confirmBtn.href = deleteUrl; // Masukkan alamat hapus database ke tombol konfirmasi modal
+        modal.style.display = 'flex'; // Munculkan pop-up melayang di tengah layar
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById('deleteModal');
+        modal.style.display = 'none'; // Sembunyikan pop-up kembali
+    }
+
+    // Menutup modal jika pengguna mengklik area luar hitam transparan
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+    </script>
 
 </body>
 </html>
