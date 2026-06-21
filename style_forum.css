@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background: #f5f5f5;
     color: #333;
 }
@@ -26,29 +26,28 @@ body {
     align-items: center;
 }
 
+/* 1. ATURAN DASAR UNTUK SEMUA TEKS MENU (Kondisi Awal: Putih Polos) */
 .menu a {
     text-decoration: none;
-    color: #ffffff;
+    color: #ffffff;            /* Teks berwarna putih */
     font-size: 15px;
-    font-weight: 500;
-    padding: 8px 16px;
+    font-weight: 600;
+    padding: 5px 0;            /* Padding disederhanakan agar tidak melebar seperti tombol */
+    transition: color 0.2s ease; /* Transisi halus khusus untuk perubahan warna teks */
 }
 
+/* 2. KONDISI HALAMAN AKTIF (Teks Otomatis Berubah Kuning, Tanpa Background Tombol) */
 .menu a.active {
-    background: #ffe600;
-    color: #000000;
-    border-radius: 20px;
+    color: #ffe600;            /* Teks berubah menjadi kuning khas Moodify */
+    background: none;          /* Menghapus background bulat bawaan */
     font-weight: bold;
 }
 
-.logout-btn {
-    text-decoration: none;
-    color: #333;
+/* 3. KONDISI PAS DISOROT MOUSE (Teks Berubah dari Putih ke Kuning Langsung) */
+.menu a:hover {
+    color: #ffe600;            /* Teks berubah menjadi kuning saat dilewati kursor */
+    background: none;          /* Memastikan tidak ada kotak tombol yang muncul */
     font-weight: bold;
-    background: #ffe600;
-    padding: 8px 18px;
-    border-radius: 20px;
-    font-size: 14px;
 }
 
 .container {
@@ -97,6 +96,7 @@ select, textarea {
     box-sizing: border-box;
     font-size: 14px;
     background: white;
+    font-family: system-ui, sans-serif;
 }
 
 textarea {
@@ -113,6 +113,7 @@ textarea {
     cursor: pointer;
     font-size: 14px;
     color: #000000;
+    font-family: system-ui, sans-serif;
 }
 
 .card {
@@ -169,6 +170,7 @@ textarea {
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
+    font-family: system-ui, sans-serif;
 }
 
 .btn-save {
@@ -179,6 +181,7 @@ textarea {
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
+    font-family: system-ui, sans-serif;
 }
 
 .btn-cancel {
@@ -188,4 +191,5 @@ textarea {
     padding: 10px 20px;
     border-radius: 8px;
     cursor: pointer;
+    font-family: system-ui, sans-serif;
 }

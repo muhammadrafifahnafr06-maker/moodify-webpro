@@ -23,7 +23,7 @@ $query_data = mysqli_query($conn, "SELECT * FROM kotak_rahasia $filter ORDER BY 
 <head>
     <meta charset="UTF-8">
     <title>Moodify - Kotak Rahasia</title>
-    <link rel="stylesheet" href="style_forum.css">
+   <link rel="stylesheet" href="style_forum.css?v=3">
 </head>
 <body>
 
@@ -34,10 +34,8 @@ $query_data = mysqli_query($conn, "SELECT * FROM kotak_rahasia $filter ORDER BY 
     <div class="menu">
         <a href="suasana_hati.php">Suasana Hati</a>
         <a href="mydiary.php">My Diary</a>
-        <a href="kotakrahasia.php" class="active">Kotak Rahasia</a>
-        <a href="moodtracker.php">Mood Tracker</a>
-        <a href="Logout.php" class="logout-btn">Logout</a>
-    </div>
+        <a href="kotakrahasia.php" class="active">Kotak Rahasia</a> <a href="mood_tracker.php">Mood Tracker</a>
+        <a href="logout.php">Logout</a> </div>
 </div>
 
 <div class="container">
