@@ -7,7 +7,7 @@ if(!isset($_SESSION['username'])){
     exit();
 }
 
-$id_user=$_SESSION['id_user'];
+$id_user = $_SESSION['user_id'];
 
 $search="";
 
