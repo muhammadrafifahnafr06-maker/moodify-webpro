@@ -20,25 +20,26 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     if ($data) {
 
         $_SESSION['login'] = true;
-        $_SESSION['id_user'] = $data['id_user'];
         $_SESSION['username'] = $data['username'];
         $_SESSION['role'] = $data['role'];
+
+        $_SESSION['id_user'] = $data['id_user'];
+        $_SESSION['user_id'] = $data['id_user']; 
 
         header("Location: suasana_hati.php");
         exit();
 
     } else {
-
         echo "<script>
                 alert('Username atau password salah!');
-                window.location='Login.php';
+                window.location='login.php';
               </script>";
 
     }
 
 } else {
 
-    header("Location: Login.php");
+    header("Location: login.php");
     exit();
 
 }

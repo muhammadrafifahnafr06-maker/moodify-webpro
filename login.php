@@ -84,7 +84,7 @@ if (isset($_SESSION['username'])) {
         <h1>Moodify</h1>
         <p>Silahkan Login</p>
 
-        <form action="Proses_login.php" method="POST">
+        <form action="proses_login.php" method="POST">
             <input 
                 type="text" 
                 name="username" 

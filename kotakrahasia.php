@@ -44,7 +44,6 @@ $query_data = mysqli_query($conn, "SELECT * FROM kotak_rahasia $filter ORDER BY 
     <h1>Kotak Rahasia</h1>
     <p style="color: #666; margin-top: -10px; margin-bottom: 30px;">Bercerita secara anonim</p>
 
-```
 <select id="kategori">
     <option value="Anxiety">Anxiety</option>
     <option value="Depresi">Depresi</option>
@@ -89,7 +88,6 @@ $query_data = mysqli_query($conn, "SELECT * FROM kotak_rahasia $filter ORDER BY 
     </div>
 </div>
 <?php endwhile; ?>
-```
 
 </div>
 
