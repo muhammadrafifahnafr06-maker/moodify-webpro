@@ -3,28 +3,43 @@ session_start();
 
 include 'Config.php';
 
-$username = $_POST['username'];
-$password = $_POST['password'];
+if (isset($_POST['username']) && isset($_POST['password'])) {
 
-$query = mysqli_query(
-    $conn,
-    "SELECT * FROM users
-    WHERE username='$username'
-    AND password='$password'"
-);
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-$data = mysqli_num_rows($query);
+    $query = mysqli_query(
+        $conn,
+        "SELECT * FROM users
+        WHERE username='$username'
+        AND password='$password'"
+    );
 
-if($data > 0){
+    $data = mysqli_fetch_assoc($query);
 
-    $_SESSION['login'] = true;
+    if ($data) {
 
-    header("Location: suasana_hati.php");
+        $_SESSION['login'] = true;
+        $_SESSION['id_user'] = $data['id_user'];
+        $_SESSION['username'] = $data['username'];
+        $_SESSION['role'] = $data['role'];
 
-}else{
+        header("Location: suasana_hati.php");
+        exit();
 
-    echo "Login gagal";
+    } else {
+
+        echo "<script>
+                alert('Username atau password salah!');
+                window.location='Login.php';
+              </script>";
+
+    }
+
+} else {
+
+    header("Location: Login.php");
+    exit();
 
 }
-
-?> 
+?>

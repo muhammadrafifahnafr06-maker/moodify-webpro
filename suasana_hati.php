@@ -1,25 +1,25 @@
 <?php
 session_start();
-include "config.php";
+include "Config.php";
 
 if(!isset($_SESSION['username'])){
-    header("Location: login.php");
+    header("Location: Login.php");
     exit();
 }
 
-$id_user = $_SESSION['user_id'];
+$id_user = $_SESSION['id_user'];
 
-$data=mysqli_query(
-$conn,
-"SELECT * FROM suasana_hati
-WHERE id_user='$id_user'
-ORDER BY id_mood DESC"
+$data = mysqli_query(
+    $conn,
+    "SELECT * FROM suasana_hati
+    WHERE id_user='$id_user'
+    ORDER BY id_mood DESC"
 );
 
-$username="User";
+$username = "User";
 
 if(isset($_SESSION['username'])){
-    $username=$_SESSION['username'];
+    $username = $_SESSION['username'];
 }
 ?>
 
@@ -255,11 +255,11 @@ Moodify
 
 <a href="mydiary.php">My Diary</a>
 
-<a href="kotak_rahasia.php">Kotak Rahasia</a>
+<a href="kotakrahasia.php">Kotak Rahasia</a>
 
-<a href="mood_tracker.php">Mood Tracker</a>
+<a href="moodtracker.php">Mood Tracker</a>
 
-<a href="logout.php">Logout</a>
+<a href="Logout.php">Logout</a>
 
 </div>
 

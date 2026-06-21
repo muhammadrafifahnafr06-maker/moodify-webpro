@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'config.php';
+include 'Config.php';
 
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
@@ -18,6 +18,7 @@ $query_data = mysqli_query($conn, "SELECT * FROM kotak_rahasia $filter ORDER BY 
 ?>
 
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -34,59 +35,62 @@ $query_data = mysqli_query($conn, "SELECT * FROM kotak_rahasia $filter ORDER BY 
         <a href="suasana_hati.php">Suasana Hati</a>
         <a href="mydiary.php">My Diary</a>
         <a href="kotakrahasia.php" class="active">Kotak Rahasia</a>
-        <a href="#">Mood Tracker</a>
-        <a href="logout.php" class="logout-btn">Logout</a>
+        <a href="moodtracker.php">Mood Tracker</a>
+        <a href="Logout.php" class="logout-btn">Logout</a>
     </div>
 </div>
 
 <div class="container">
     <h1>Kotak Rahasia</h1>
     <p style="color: #666; margin-top: -10px; margin-bottom: 30px;">Bercerita secara anonim</p>
-    
-    <select id="kategori">
-        <option value="Anxiety">Anxiety</option>
-        <option value="Depresi">Depresi</option>
-        <option value="Stres">Stres</option>
+
+```
+<select id="kategori">
+    <option value="Anxiety">Anxiety</option>
+    <option value="Depresi">Depresi</option>
+    <option value="Stres">Stres</option>
+</select>
+
+<textarea id="isi_cerita" placeholder="Tulis ceritamu di sini..."></textarea>
+
+<button class="kirim-btn" onclick="kirimCerita()">Kirim Cerita</button>
+
+<hr style="margin:40px 0; border: 0; border-top: 1px solid #eee;">
+
+<form method="GET" style="display: flex; gap: 10px; margin-bottom: 30px;">
+    <select name="forum" style="margin-bottom: 0;">
+        <option value="">Semua Forum</option>
+        <option value="Anxiety" <?php if(isset($_GET['forum']) && $_GET['forum']=='Anxiety') echo 'selected'; ?>>Anxiety</option>
+        <option value="Depresi" <?php if(isset($_GET['forum']) && $_GET['forum']=='Depresi') echo 'selected'; ?>>Depresi</option>
+        <option value="Stres" <?php if(isset($_GET['forum']) && $_GET['forum']=='Stres') echo 'selected'; ?>>Stres</option>
     </select>
+    <button type="submit" class="kirim-btn" style="white-space: nowrap;">Filter Forum</button>
+</form>
 
-    <textarea id="isi_cerita" placeholder="Tulis ceritamu di sini..."></textarea>
+<h2>Daftar Cerita</h2>
 
-    <button class="kirim-btn" onclick="kirimCerita()">Kirim Cerita</button>
+<?php while($row = mysqli_fetch_assoc($query_data)): ?>
+<div class="card" id="post-<?php echo $row['id_post']; ?>">
+    <span class="badge"><?php echo htmlspecialchars($row['kategori']); ?></span>
+    <p id="text-<?php echo $row['id_post']; ?>" style="line-height: 1.6; margin: 15px 0;">
+        <?php echo nl2br(htmlspecialchars($row['isi_cerita'])); ?>
+    </p>
 
-    <hr style="margin:40px 0; border: 0; border-top: 1px solid #eee;">
-    
-    <form method="GET" style="display: flex; gap: 10px; margin-bottom: 30px;">
-        <select name="forum" style="margin-bottom: 0;">
-            <option value="">Semua Forum</option>
-            <option value="Anxiety" <?php if(isset($_GET['forum']) && $_GET['forum']=='Anxiety') echo 'selected'; ?>>Anxiety</option>
-            <option value="Depresi" <?php if(isset($_GET['forum']) && $_GET['forum']=='Depresi') echo 'selected'; ?>>Depresi</option>
-            <option value="Stres" <?php if(isset($_GET['forum']) && $_GET['forum']=='Stres') echo 'selected'; ?>>Stres</option>
-        </select>
-        <button type="submit" class="kirim-btn" style="white-space: nowrap;">Filter Forum</button>
-    </form>
-    
-    <h2>Daftar Cerita</h2>
-    
-    <?php while($row = mysqli_fetch_assoc($query_data)): ?>
-    <div class="card" id="post-<?php echo $row['id_post']; ?>">
-        <span class="badge"><?php echo htmlspecialchars($row['kategori']); ?></span>
-        <p id="text-<?php echo $row['id_post']; ?>" style="line-height: 1.6; margin: 15px 0;">
-            <?php echo nl2br(htmlspecialchars($row['isi_cerita'])); ?>
-        </p>
+    <div style="margin-top:15px;">
+        <button onclick="bukaModalEdit(<?php echo $row['id_post']; ?>)"
+                style="cursor:pointer; background:#4CAF50; color:white; border:none; padding:6px 15px; border-radius:20px; font-size:13px;">
+            Edit
+        </button>
 
-        <div style="margin-top:15px;">
-            <button onclick="bukaModalEdit(<?php echo $row['id_post']; ?>)"
-                    style="cursor:pointer; background:#4CAF50; color:white; border:none; padding:6px 15px; border-radius:20px; font-size:13px;">
-                Edit
-            </button>
-
-            <button onclick="bukaModalHapus(<?php echo $row['id_post']; ?>)"
-                    style="cursor:pointer; background:#ff4757; color:white; border:none; padding:6px 15px; border-radius:20px; font-size:13px; margin-left: 5px;">
-                Hapus
-            </button>
-        </div>
+        <button onclick="bukaModalHapus(<?php echo $row['id_post']; ?>)"
+                style="cursor:pointer; background:#ff4757; color:white; border:none; padding:6px 15px; border-radius:20px; font-size:13px; margin-left: 5px;">
+            Hapus
+        </button>
     </div>
-    <?php endwhile; ?>
+</div>
+<?php endwhile; ?>
+```
+
 </div>
 
 <div id="modalHapus" class="custom-modal">
