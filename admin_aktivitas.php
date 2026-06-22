@@ -1,21 +1,35 @@
 <?php
+session_start();
 include 'Config.php';
 
-$data = mysqli_query($conn, "SELECT * FROM aktivitas_harian ORDER BY tanggal DESC");
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
-$totalQuery = mysqli_query($conn, "SELECT COUNT(*) AS total FROM aktivitas_harian");
+$id_user = $_SESSION['user_id'];
+$role = $_SESSION['role'] ?? 'user';
+
+if ($role == 'admin') {
+    // Jika ADMIN: Tarik SEMUA data dari database
+    $data = mysqli_query($conn, "SELECT * FROM aktivitas_harian ORDER BY tanggal DESC");
+    $totalQuery = mysqli_query($conn, "SELECT COUNT(*) AS total FROM aktivitas_harian");
+    $rataQuery = mysqli_query($conn, "SELECT AVG(durasi_tidur) AS rata FROM aktivitas_harian");
+    $stresQuery = mysqli_query($conn, "SELECT tingkat_stres, COUNT(*) AS total FROM aktivitas_harian GROUP BY tingkat_stres ORDER BY total DESC LIMIT 1");
+} else {
+    // Jika USER BIASA: Sementara ditarik semua dulu karena tabel aktivitas_harian tidak punya kolom id_user
+    $data = mysqli_query($conn, "SELECT * FROM aktivitas_harian ORDER BY tanggal DESC");
+    $totalQuery = mysqli_query($conn, "SELECT COUNT(*) AS total FROM aktivitas_harian");
+    $rataQuery = mysqli_query($conn, "SELECT AVG(durasi_tidur) AS rata FROM aktivitas_harian");
+    $stresQuery = mysqli_query($conn, "SELECT tingkat_stres, COUNT(*) AS total FROM aktivitas_harian GROUP BY tingkat_stres ORDER BY total DESC LIMIT 1");
+}
+
 $totalData = mysqli_fetch_assoc($totalQuery);
 $totalAktivitas = $totalData['total'];
 
-$rataQuery = mysqli_query($conn, "SELECT AVG(durasi_tidur) AS rata FROM aktivitas_harian");
 $rataData = mysqli_fetch_assoc($rataQuery);
 $rataTidur = round($rataData['rata'] ?? 0, 1);
 
-$stresQuery = mysqli_query($conn, "SELECT tingkat_stres, COUNT(*) AS total 
-                                  FROM aktivitas_harian 
-                                  GROUP BY tingkat_stres 
-                                  ORDER BY total DESC 
-                                  LIMIT 1");
 $stresData = mysqli_fetch_assoc($stresQuery);
 $stresDominan = $stresData['tingkat_stres'] ?? '-';
 ?>
@@ -42,7 +56,9 @@ $stresDominan = $stresData['tingkat_stres'] ?? '-';
 
 <div class="container">
     <h1>Mood Tracker 📊</h1>
-    <p class="subtitle">Kelola aktivitas harian untuk memantau suasana hati pengguna</p>
+    <p class="subtitle">
+        <?= ($role == 'admin') ? "Kelola aktivitas harian untuk memantau suasana hati pengguna" : "Pantau grafik dan riwayat aktivitas harianmu"; ?>
+    </p>
 
     <div class="cards">
         <div class="card">
@@ -62,10 +78,12 @@ $stresDominan = $stresData['tingkat_stres'] ?? '-';
     </div>
 
     <div class="box">
-        <a href="admin_aktivitas.php" class="btn btn-menu">Aktivitas Harian</a>
-        <a href="admin_rekomendasi.php" class="btn btn-menu">Rekomendasi Mood</a>
+        <?php if ($role == 'admin') : ?>
+            <a href="admin_aktivitas.php" class="btn btn-menu">Aktivitas Harian</a>
+            <a href="admin_rekomendasi.php" class="btn btn-menu">Rekomendasi Mood</a>
+        <?php endif; ?>
 
-        <h2>Data Aktivitas Harian</h2>
+        <h2>Data Aktivitas Harian <?= ($role == 'admin') ? "(All Users)" : "(Saya)"; ?></h2>
         <a href="tambah_aktivitas.php" class="btn">+ Tambah Aktivitas</a>
 
         <table>
@@ -76,7 +94,9 @@ $stresDominan = $stresData['tingkat_stres'] ?? '-';
                 <th>Aktivitas Fisik</th>
                 <th>Tingkat Stres</th>
                 <th>Catatan</th>
-                <th>Aksi</th>
+                <?php if ($role == 'admin') : ?>
+                    <th>Aksi</th>
+                <?php endif; ?>
             </tr>
 
             <?php
@@ -90,10 +110,12 @@ $stresDominan = $stresData['tingkat_stres'] ?? '-';
                 <td><?= htmlspecialchars($row['aktivitas_fisik']); ?></td>
                 <td><?= $row['tingkat_stres']; ?></td>
                 <td><?= htmlspecialchars($row['catatan']); ?></td>
-                <td>
-                    <a class="btn-edit" href="edit_aktivitas.php?id=<?= $row['id_aktivitas']; ?>">Edit</a>
-                    <a class="btn-delete" href="hapus_aktivitas.php?id=<?= $row['id_aktivitas']; ?>" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
-                </td>
+                <?php if ($role == 'admin') : ?>
+                    <td>
+                        <a class="btn-edit" href="edit_aktivitas.php?id=<?= $row['id_aktivitas']; ?>">Edit</a>
+                        <a class="btn-delete" href="hapus_aktivitas.php?id=<?= $row['id_aktivitas']; ?>" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
+                    </td>
+                <?php endif; ?>
             </tr>
             <?php } ?>
         </table>
