@@ -85,7 +85,6 @@ $query_data = mysqli_query($conn, "SELECT id_user, username, email, password, ro
         .btn-delete { color: #d9534f; text-decoration: none; font-weight: bold; cursor: pointer; display: inline-block; }
         .btn-delete:hover { color: #b30000; }
 
-        /* ==================== STYLE MODAL CUSTOM (TENGAH LAYAR) ==================== */
         .custom-modal {
             display: none; 
             position: fixed;
@@ -249,16 +248,15 @@ $query_data = mysqli_query($conn, "SELECT id_user, username, email, password, ro
         const modal = document.getElementById('deleteModal');
         const confirmBtn = document.getElementById('confirmDeleteBtn');
         
-        confirmBtn.href = deleteUrl; // Masukkan alamat hapus database ke tombol konfirmasi modal
-        modal.style.display = 'flex'; // Munculkan pop-up melayang di tengah layar
+        confirmBtn.href = deleteUrl; 
+        modal.style.display = 'flex'; 
     }
 
     function closeDeleteModal() {
         const modal = document.getElementById('deleteModal');
-        modal.style.display = 'none'; // Sembunyikan pop-up kembali
+        modal.style.display = 'none'; 
     }
 
-    // Menutup modal jika pengguna mengklik area luar hitam transparan
     window.onclick = function(event) {
         const modal = document.getElementById('deleteModal');
         if (event.target == modal) {

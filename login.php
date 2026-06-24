@@ -2,8 +2,6 @@
 session_start();
 include 'config.php';
 
-// 1. PENCEGAHAN LOOP REDIRECT
-// Jika user/admin SUDAH LOGIN, langsung oper ke halaman masing-masing
 if (isset($_SESSION['user_id'])) {
     if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
         header("Location: admin_dashboard.php");
@@ -14,26 +12,20 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 
-// 2. PROSES EKSEKUSI TOMBOL LOGIN
 if (isset($_POST['login'])) {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = $_POST['password']; 
-
-    // Query mencari user berdasarkan username
     $query = mysqli_query($conn, "SELECT * FROM users WHERE username = '$username'");
     
     if (mysqli_num_rows($query) > 0) {
         $row = mysqli_fetch_assoc($query);
-
-        // Cek kecocokan password
         if ($password == $row['password']) {
-            
-            // Daftarkan data ke session secara lengkap
+         
             $_SESSION['user_id']  = $row['id_user'];
             $_SESSION['username'] = $row['username'];
             $_SESSION['role']     = $row['role']; 
 
-            // Alihkan halaman secara spesifik sesuai ROLE
+     
             if ($row['role'] == 'admin') {
                 header("Location: admin_dashboard.php");
                 exit();
@@ -62,7 +54,6 @@ if (isset($_POST['login'])) {
     <style>
         body { 
             margin: 0; 
-            /* Menggunakan font system-ui agar serasi bulat minimalis dengan navbar */
             font-family: system-ui, -apple-system, sans-serif; 
             background: #f5f5f5; 
             display: flex; 

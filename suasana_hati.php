@@ -172,7 +172,7 @@ font-weight:bold;
         <a href="suasana_hati.php">Suasana Hati</a>
         <a href="mydiary.php">My Diary</a>
         <a href="kotakrahasia.php">Kotak Rahasia</a>
-        <a href="admin_aktivitas.php">Mood Tracker</a>
+        <a href="moodtracker.php">Mood Tracker</a>
         <a href="Logout.php">Logout</a>
     </div>
 </div>

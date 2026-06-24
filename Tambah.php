@@ -1,27 +1,28 @@
 <?php
 session_start();
-include 'config.php';
+include 'Config.php';
 
-if(!isset($_SESSION['login'])){
-    header("Location: login.php");
-    exit;
+if (!isset($_SESSION['user_id'])) {
+    header("Location: Login.php");
+    exit();
 }
 
-$id_user = $_SESSION['id_user'];
+if (isset($_POST['judul']) && isset($_POST['isi'])) {
+    $id_user = $_SESSION['user_id'];
+    $judul = mysqli_real_escape_string($conn, $_POST['judul']);
+    $isi_diary = mysqli_real_escape_string($conn, $_POST['isi']);
+    $tanggal = date('Y-m-d');
 
-$judul = mysqli_real_escape_string($conn,$_POST['judul']);
-$isi = mysqli_real_escape_string($conn,$_POST['isi']);
+    $query = "INSERT INTO my_diary (id_user, judul, isi_diary, tanggal) VALUES ('$id_user', '$judul', '$isi_diary', '$tanggal')";
 
-$tanggal = date("Y-m-d");
-
-mysqli_query(
-$conn,
-"INSERT INTO my_diary
-(id_user,judul,isi_diary,tanggal)
-VALUES
-('$id_user','$judul','$isi','$tanggal')"
-);
-
-header("Location: mydiary.php");
-exit;
+    if (mysqli_query($conn, $query)) {
+        header("Location: mydiary.php");
+        exit();
+    } else {
+        echo "Gagal menyimpan data: " . mysqli_error($conn);
+    }
+} else {
+    header("Location: mydiary.php");
+    exit();
+}
 ?>

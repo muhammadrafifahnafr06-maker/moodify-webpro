@@ -34,7 +34,8 @@ $query_data = mysqli_query($conn, "SELECT * FROM kotak_rahasia $filter ORDER BY 
     <div class="menu">
         <a href="suasana_hati.php">Suasana Hati</a>
         <a href="mydiary.php">My Diary</a>
-        <a href="kotakrahasia.php" class="active">Kotak Rahasia</a> <a href="mood_tracker.php">Mood Tracker</a>
+        <a href="kotakrahasia.php" class="active">Kotak Rahasia</a>
+        <a href="moodtracker.php">Mood Tracker</a>
         <a href="logout.php">Logout</a> </div>
 </div>
 
