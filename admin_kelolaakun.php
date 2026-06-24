@@ -1,8 +1,8 @@
 <?php
 session_start();
-include 'config.php'; 
+include 'config.php';
 
-if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin'){
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
     header("Location: login.php");
     exit();
 }
@@ -42,6 +42,7 @@ if (isset($_POST['edit_user'])) {
 if (isset($_GET['action']) && $_GET['action'] == 'delete') {
     $id = intval($_GET['id']);
     $query = "DELETE FROM users WHERE id_user=$id";
+    
     if (mysqli_query($conn, $query)) {
         header("Location: admin_kelolaakun.php?status=success");
         exit();
@@ -85,57 +86,12 @@ $query_data = mysqli_query($conn, "SELECT id_user, username, email, password, ro
         .btn-delete { color: #d9534f; text-decoration: none; font-weight: bold; cursor: pointer; display: inline-block; }
         .btn-delete:hover { color: #b30000; }
 
-        .custom-modal {
-            display: none; 
-            position: fixed;
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5); 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 9999; 
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            width: 360px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            animation: fadeIn 0.25s ease;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .btn-modal-cancel {
-            background-color: #e0e0e0;
-            color: #333;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 14px;
-        }
+        .custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 9999; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; width: 360px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.2); animation: fadeIn 0.25s ease; }
+        .modal-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
+        .btn-modal-cancel { background-color: #e0e0e0; color: #333; border: none; padding: 10px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
         .btn-modal-cancel:hover { background-color: #d5d5d5; }
-
-        .btn-modal-confirm {
-            background-color: #d9534f;
-            color: white;
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 14px;
-            text-align: center;
-        }
+        .btn-modal-confirm { background-color: #d9534f; color: white; padding: 10px 24px; border-radius: 8px; font-weight: bold; font-size: 14px; text-align: center; }
         .btn-modal-confirm:hover { background-color: #b30000; }
 
         @keyframes fadeIn {
@@ -161,6 +117,7 @@ $query_data = mysqli_query($conn, "SELECT id_user, username, email, password, ro
         <?php
         $edit_mode = false;
         $id_edit = $user_edit = $email_edit = $role_edit = '';
+        
         if (isset($_GET['action']) && $_GET['action'] == 'edit') {
             $edit_mode = true;
             $id_edit = intval($_GET['id']);
@@ -210,9 +167,9 @@ $query_data = mysqli_query($conn, "SELECT id_user, username, email, password, ro
                 </tr>
             </thead>
             <tbody>
-                <?php 
+                <?php
                 $no = 1;
-                while($row = mysqli_fetch_assoc($query_data)) { 
+                while($row = mysqli_fetch_assoc($query_data)) {
                 ?>
                 <tr>
                     <td><?php echo $no++; ?></td>
@@ -222,9 +179,7 @@ $query_data = mysqli_query($conn, "SELECT id_user, username, email, password, ro
                     <td><?php echo $row['role']; ?></td>
                     <td>
                         <a href="admin_kelolaakun.php?action=edit&id=<?php echo $row['id_user']; ?>" class="btn-edit">Edit</a>
-                        
-                        <a href="javascript:void(0);" class="btn-delete" 
-                           onclick="openDeleteModal('admin_kelolaakun.php?action=delete&id=<?php echo $row['id_user']; ?>')">Hapus</a>
+                        <a href="javascript:void(0);" class="btn-delete" onclick="openDeleteModal('admin_kelolaakun.php?action=delete&id=<?php echo $row['id_user']; ?>')">Hapus</a>
                     </td>
                 </tr>
                 <?php } ?>
@@ -247,14 +202,13 @@ $query_data = mysqli_query($conn, "SELECT id_user, username, email, password, ro
     function openDeleteModal(deleteUrl) {
         const modal = document.getElementById('deleteModal');
         const confirmBtn = document.getElementById('confirmDeleteBtn');
-        
-        confirmBtn.href = deleteUrl; 
-        modal.style.display = 'flex'; 
+        confirmBtn.href = deleteUrl;
+        modal.style.display = 'flex';
     }
 
     function closeDeleteModal() {
         const modal = document.getElementById('deleteModal');
-        modal.style.display = 'none'; 
+        modal.style.display = 'none';
     }
 
     window.onclick = function(event) {
